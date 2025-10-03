@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio - TOP SECRET</title>
+    <!-- إضافة Font Awesome للأيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0c0c0c, #1a1a2e);
+            color: #00ff00;
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+            position: relative;
+        }
+
+        /* تأثيرات الخطوط */
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
+        /* خلفية مع طابع سري */
+        .classified-watermark {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(179, 0, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(0, 255, 0, 0.05) 0%, transparent 50%),
+                repeating-linear-gradient(0deg, transparent, transparent 50px, rgba(0, 30, 0, 0.1) 50px, rgba(0, 30, 0, 0.1) 51px);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .classified-stamp {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            color: rgba(179, 0, 0, 0.15);
+            font-size: 15vw;
+            font-weight: bold;
+            text-align: center;
+            z-index: -1;
+            pointer-events: none;
+            text-shadow: 0 0 20px rgba(179, 0, 0, 0.3);
+            white-space: nowrap;
+            user-select: none;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* شاشة الدخول */
+        .login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #0a0a0a, #000);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+
+        .classified-banner {
+            background: #b30000;
+            color: #fff;
+            padding: 15px 30px;
+            text-align: center;
+            border: 3px solid #ffcc00;
+            font-weight: bold;
+            font-size: 1.5rem;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+            animation: blink 2s infinite;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .classified-banner:before, .classified-banner:after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #ffcc00;
+        }
+
+        .classified-banner:before {
+            top: 5px;
+            left: 5px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .classified-banner:after {
+            bottom: 5px;
+            right: 5px;
+            border-left: none;
+            border-top: none;
+        }
+
+        .login-form {
+            background: rgba(0, 20, 0, 0.8);
+            padding: 30px;
+            border: 2px solid #00ff00;
+            border-radius: 5px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .login-form:before {
+            content: "CLASSIFIED";
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: #0a0a0a;
+            color: #b30000;
+            padding: 0 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .login-form h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            color: #00ff00;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .login-form input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            outline: none;
+        }
+
+        .login-form button {
+            width: 100%;
+            padding: 12px;
+            background: #004d00;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .login-form button:hover {
+            background: #008000;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+        }
+
+        /* الواجهة الرئيسية - تم التعديل */
+        .desktop-interface {
+            padding: 20px;
+            display: none;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* تحسين تصميم المجلدات */
+        .folder {
+            background: rgba(20, 30, 20, 0.9);
+            border: 2px solid #00ff00;
+            border-radius: 8px;
+            padding: 25px 15px;
+            width: 220px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .folder:before {
+            content: "CONFIDENTIAL";
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 0.6rem;
+            color: #b30000;
+            font-weight: bold;
+        }
+
+        .folder:hover {
+            background: rgba(0, 80, 0, 0.5);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 255, 0, 0.4);
+            border-color: #33ff33;
+        }
+
+        .folder-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            color: #00ff00;
+            text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            transition: all 0.3s;
+        }
+
+        .folder:hover .folder-icon {
+            transform: scale(1.1);
+            color: #33ff33;
+            text-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+        }
+
+        .folder-title {
+            font-weight: bold;
+            color: #00ff00;
+            font-size: 1.1rem;
+            margin-top: 10px;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        /* نافذة المحتوى */
+        .content-window {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 800px;
+            background: rgba(10, 20, 10, 0.95);
+            border: 3px solid #00ff00;
+            padding: 20px;
+            z-index: 100;
+            display: none;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #00ff00;
+            position: relative;
+        }
+
+        .content-header:before {
+            content: "RESTRICTED";
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            background: #0a0a0a;
+            color: #b30000;
+            padding: 0 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .close-btn {
+            background: #b30000;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .content-body {
+            line-height: 1.8;
+        }
+
+        .content-body h2 {
+            margin-bottom: 15px;
+            color: #00ff00;
+            border-bottom: 1px solid #004d00;
+            padding-bottom: 5px;
+            position: relative;
+        }
+
+        .content-body h2:after {
+            content: "///";
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            color: #b30000;
+            font-size: 0.8rem;
+        }
+
+        .content-body p {
+            margin-bottom: 15px;
+        }
+
+        .content-body ul {
+            list-style-type: none;
+            padding-right: 20px;
+        }
+
+        .content-body li {
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .content-body li:before {
+            content: ">";
+            position: absolute;
+            right: -15px;
+            color: #00ff00;
+        }
+
+        /* تأثيرات */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        .typewriter {
+            overflow: hidden;
+            border-right: 2px solid #00ff00;
+            white-space: nowrap;
+            animation: typewriter 3s steps(40, end);
+        }
+
+        .scan-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: rgba(0, 255, 0, 0.5);
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+            z-index: 99;
+            animation: scan 3s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+
+        .glitch {
+            position: relative;
+        }
+
+        .glitch::before, .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch::before {
+            animation: glitch-1 0.5s infinite linear alternate-reverse;
+            color: #ff00ff;
+            z-index: -1;
+        }
+
+        .glitch::after {
+            animation: glitch-2 0.5s infinite linear alternate-reverse;
+            color: #00ffff;
+            z-index: -2;
+        }
+
+        @keyframes glitch-1 {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        @keyframes glitch-2 {
+            0% { transform: translate(0); }
+            20% { transform: translate(2px, 2px); }
+            40% { transform: translate(2px, -2px); }
+            60% { transform: translate(-2px, 2px); }
+            80% { transform: translate(-2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        /* شريط الحالة */
+        .status-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 30, 0, 0.8);
+            border-top: 1px solid #00ff00;
+            padding: 5px 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            z-index: 10;
+        }
+
+        /* تأثيرات النصوص السرية */
+        .redacted {
+            background-color: #000;
+            color: transparent;
+            position: relative;
+            padding: 0 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .redacted:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                #b30000 2px,
+                #b30000 4px
+            );
+        }
+
+        .redacted.revealed {
+            background-color: transparent;
+            color: #00ff00;
+        }
+
+        .redacted.revealed:before {
+            display: none;
+        }
+
+        .classified-text {
+            border: 1px dashed #b30000;
+            padding: 5px 10px;
+            margin: 5px 0;
+            background: rgba(179, 0, 0, 0.05);
+        }
+
+        /* نظام التشفير */
+        .encryption-status {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 30, 0, 0.8);
+            border: 1px solid #00ff00;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            z-index: 50;
+        }
+
+        /* مؤشر التحميل */
+        .loading-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: #00ff00;
+            z-index: 200;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+            transition: width 0.3s;
+        }
+
+        /* تأثيرات الجسيمات */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #00ff00;
+            border-radius: 50%;
+            opacity: 0;
+            animation: float 5s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100px) translateX(20px);
+                opacity: 0;
+            }
+        }
+
+        /* التحديثات الديناميكية */
+        .dynamic-updates {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(0, 30, 0, 0.8);
+            border: 1px solid #00ff00;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            z-index: 50;
+            max-width: 200px;
+        }
+
+        /* التجاوب مع الشاشات الصغيرة - تم التعديل */
+        @media (max-width: 768px) {
+            .desktop-interface {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .folder {
+                width: 90%;
+                max-width: 280px;
+                margin-bottom: 15px;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: flex-start;
+                padding: 15px;
+            }
+            
+            .folder-icon {
+                font-size: 2.5rem;
+                margin-bottom: 0;
+                margin-left: 15px;
+                flex-shrink: 0;
+            }
+            
+            .folder-title {
+                text-align: right;
+                margin-top: 0;
+            }
+            
+            .content-window {
+                width: 95%;
+                padding: 15px;
+            }
+            
+            .classified-stamp {
+                font-size: 20vw;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .folder {
+                width: 95%;
+                padding: 12px;
+            }
+            
+            .folder-icon {
+                font-size: 2rem;
+                margin-left: 10px;
+            }
+            
+            .folder-title {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- خلفية مع طابع سري -->
+    <div class="classified-watermark"></div>
+    <div class="classified-stamp">TOP SECRET</div>
+
+    <!-- خط المسح الضوئي -->
+    <div class="scan-line"></div>
+
+    <!-- مؤشر التحميل -->
+    <div class="loading-bar" id="loadingBar"></div>
+
+    <!-- نظام التشفير -->
+    <div class="encryption-status" id="encryptionStatus">
+        ENCRYPTION: <span style="color: #00ff00;">ACTIVE</span>
+    </div>
+
+    <!-- التحديثات الديناميكية -->
+    <div class="dynamic-updates" id="dynamicUpdates">
+        SYSTEM: <span id="systemStatus">INITIALIZING...</span>
+    </div>
+
+    <!-- تأثيرات الجسيمات -->
+    <div class="particles" id="particlesContainer"></div>
+
+    <!-- شاشة الدخول -->
+    <div class="login-screen" id="loginScreen">
+        <div class="classified-banner glitch" data-text="TOP SECRET - CLASSIFIED">
+            TOP SECRET - CLASSIFIED
+        </div>
+        <div class="login-form">
+            <h3 class="typewriter">ACCESS PORTFOLIO</h3>
+            <input type="password" id="passwordInput" placeholder="Enter Access Code">
+            <button id="unlockBtn">UNLOCK</button>
+            <p style="text-align: center; margin-top: 15px; font-size: 0.8rem;">
+                Hint: Try "portfolio"
+            </p>
+        </div>
+    </div>
+
+    <!-- الواجهة الرئيسية - تم تحديث الأيقونات -->
+    <div class="desktop-interface" id="desktop">
+        <div class="folder" data-target="about">
+            <div class="folder-icon"><i class="fas fa-user-secret"></i></div>
+            <div class="folder-title">ABOUT_ME.txt</div>
+        </div>
+        
+        <div class="folder" data-target="projects">
+            <div class="folder-icon"><i class="fas fa-folder-open"></i></div>
+            <div class="folder-title">MY_PROJECTS</div>
+        </div>
+        
+        <div class="folder" data-target="skills">
+            <div class="folder-icon"><i class="fas fa-cogs"></i></div>
+            <div class="folder-title">SKILLS_SET</div>
+        </div>
+        
+        <div class="folder" data-target="contact">
+            <div class="folder-icon"><i class="fas fa-envelope"></i></div>
+            <div class="folder-title">CONTACT_ME</div>
+        </div>
+        
+        <div class="folder" data-target="secret">
+            <div class="folder-icon"><i class="fas fa-lock"></i></div>
+            <div class="folder-title">SECRET_FILES</div>
+        </div>
+    </div>
+
+    <!-- نافذة المحتوى -->
+    <div class="content-window" id="contentWindow">
+        <div class="content-header">
+            <h2 id="contentTitle">CONTENT TITLE</h2>
+            <button class="close-btn" id="closeBtn">X CLOSE</button>
+        </div>
+        <div class="content-body" id="contentBody">
+            <!-- المحتوى سيتم إضافته هنا -->
+        </div>
+    </div>
+
+    <!-- شريط الحالة -->
+    <div class="status-bar">
+        <div>SYSTEM STATUS: <span style="color: #00ff00;">OPERATIONAL</span></div>
+        <div>ACCESS LEVEL: <span style="color: #00ff00;">CLASSIFIED</span></div>
+        <div id="currentTime">TIME: --:--:--</div>
+    </div>
+
+    <script>
+        // العناصر الأساسية
+        const loginScreen = document.getElementById('loginScreen');
+        const desktop = document.getElementById('desktop');
+        const passwordInput = document.getElementById('passwordInput');
+        const unlockBtn = document.getElementById('unlockBtn');
+        const contentWindow = document.getElementById('contentWindow');
+        const contentTitle = document.getElementById('contentTitle');
+        const contentBody = document.getElementById('contentBody');
+        const closeBtn = document.getElementById('closeBtn');
+        const currentTime = document.getElementById('currentTime');
+        const loadingBar = document.getElementById('loadingBar');
+        const encryptionStatus = document.getElementById('encryptionStatus');
+        const dynamicUpdates = document.getElementById('dynamicUpdates');
+        const systemStatus = document.getElementById('systemStatus');
+        const particlesContainer = document.getElementById('particlesContainer');
+
+        // إنشاء تأثير الجسيمات
+        function createParticles() {
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                particle.style.animationDuration = `${3 + Math.random() * 4}s`;
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // تحديث الوقت
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            currentTime.textContent = `TIME: ${timeString}`;
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // محاكاة نظام التشفير
+        function simulateEncryption() {
+            const statusText = encryptionStatus.querySelector('span');
+            const statuses = ['ACTIVE', 'VERIFYING', 'RE-ENCRYPTING', 'SECURE'];
+            let index = 0;
+            
+            setInterval(() => {
+                statusText.textContent = statuses[index];
+                statusText.style.color = index % 2 === 0 ? '#00ff00' : '#ffff00';
+                index = (index + 1) % statuses.length;
+            }, 3000);
+        }
+
+        // محاكاة تحديثات النظام
+        function simulateSystemUpdates() {
+            const updates = [
+                'INITIALIZING...',
+                'LOADING MODULES...',
+                'VERIFYING SECURITY...',
+                'SYSTEM READY',
+                'MONITORING...',
+                'ALL SYSTEMS NOMINAL'
+            ];
+            
+            let index = 0;
+            const interval = setInterval(() => {
+                systemStatus.textContent = updates[index];
+                index++;
+                
+                if (index >= updates.length) {
+                    clearInterval(interval);
+                    // بعد اكتمال التهيئة، نبدأ بتحديثات عشوائية
+                    setInterval(() => {
+                        const randomUpdates = [
+                            'SCANNING...',
+                            'ENCRYPTION ACTIVE',
+                            'NO THREATS DETECTED',
+                            'ALL SYSTEMS NOMINAL',
+                            'MONITORING NETWORK',
+                            'SECURITY: OPTIMAL'
+                        ];
+                        systemStatus.textContent = randomUpdates[Math.floor(Math.random() * randomUpdates.length)];
+                    }, 5000);
+                }
+            }, 1000);
+        }
+
+        // محاكاة شريط التحميل
+        function simulateLoading() {
+            let width = 0;
+            const interval = setInterval(() => {
+                width += Math.random() * 10;
+                loadingBar.style.width = `${width}%`;
+                
+                if (width >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        loadingBar.style.width = '0%';
+                    }, 500);
+                }
+            }, 200);
+        }
+
+        // بيانات المحتوى مع إضافة عناصر سرية ومتقدمة
+        const contentData = {
+            about: {
+                title: "ABOUT_ME.txt",
+                content: `
+                    <h2>معلومات شخصية</h2>
+                    <p>اسم: <span class="redacted" data-reveal="محمد أحمد">[محمي]</span></p>
+                    <p>تخصص: Front-End Developer & Security Specialist</p>
+                    <p>موقع: <span class="redacted" data-reveal="القاهرة، مصر">[محمي]</span></p>
+                    
+                    <h2>نبذة عني</h2>
+                    <p>أنا مطور واجهات أمامية شغوف بالتكنولوجيا وأحب تحويل الأفكار الإبداعية إلى واقع ملموس. لدي خبرة في تطوير تطبيقات ويب تفاعلية وسهلة الاستخدام.</p>
+                    
+                    <div class="classified-text">
+                        <p><strong>ملاحظة سرية:</strong> بعض المشاريع التي عملت عليها كانت لجهات حكومية وتحتاج إلى تصريح أمني للوصول إليها.</p>
+                    </div>
+                    
+                    <h2>الخبرات</h2>
+                    <ul>
+                        <li>+5 سنوات في تطوير الواجهات الأمامية</li>
+                        <li>عملت على مشاريع متنوعة للعملاء المحليين والدوليين</li>
+                        <li>مشارك في مجتمع المطورين المحلي</li>
+                        <li class="redacted" data-reveal="عملت على مشاريع أمنية حساسة لجهات حكومية">عملت على مشاريع أمنية حساسة</li>
+                    </ul>
+                    
+                    <h2>الشهادات</h2>
+                    <ul>
+                        <li>شهادة في تطوير الويب - [المؤسسة]</li>
+                        <li>دورة متقدمة في JavaScript - [المنصة]</li>
+                        <li>شهادة في React.js - [المصدر]</li>
+                        <li class="redacted" data-reveal="شهادة أمن المعلومات - [جهة حكومية]">شهادة أمنية متقدمة</li>
+                    </ul>
+                `
+            },
+            projects: {
+                title: "MY_PROJECTS",
+                content: `
+                    <h2>المشاريع الحديثة</h2>
+                    
+                    <h3>متجر إلكتروني</h3>
+                    <p>منصة تسوق عبر الإنترنت مع نظام دفع آمن وتجربة مستخدم محسنة.</p>
+                    <p><strong>التقنيات:</strong> React, Redux, Node.js, MongoDB</p>
+                    <p><strong>الرابط:</strong> <a href="#" style="color: #00ff00;">example-store.com</a></p>
+                    
+                    <h3>تطبيق إدارة المهام</h3>
+                    <p>تطبيق ويب لإدارة المهام اليومية مع ميزات التذكير والتقارير.</p>
+                    <p><strong>التقنيات:</strong> Vue.js, Firebase, CSS3</p>
+                    <p><strong>الرابط:</strong> <a href="#" style="color: #00ff00;">taskmanager.app</a></p>
+                    
+                    <h3>موقع بورتفوليو للفنانين</h3>
+                    <p>منصة لعرض أعمال الفنانين مع نظام حجز مواعيد.</p>
+                    <p><strong>التقنيات:</strong> HTML5, CSS3, JavaScript, PHP</p>
+                    <p><strong>الرابط:</strong> <a href="#" style="color: #00ff00;">artists-portfolio.net</a></p>
+                    
+                    <div class="classified-text">
+                        <h3>نظام إدارة محتوى حساس</h3>
+                        <p>نظام مخصص لإدارة المحتوى الحساس مع طبقات أمنية متعددة.</p>
+                        <p><strong>التقنيات:</strong> React, Node.js, MongoDB, تشفير AES-256</p>
+                        <p><strong>الحالة:</strong> <span style="color: #b30000;">مقيد - يحتاج إلى تصريح أمني</span></p>
+                    </div>
+                    
+                    <h2>المشاريع الجانبية</h2>
+                    <ul>
+                        <li>أداة تحليل النصوص - JavaScript</li>
+                        <li>لعبة الذاكرة - React</li>
+                        <li>محول العملات - Vue.js</li>
+                        <li class="redacted" data-reveal="أداة فك التشفير - Python">أداة تحليل شفرات</li>
+                    </ul>
+                `
+            },
+            skills: {
+                title: "SKILLS_SET",
+                content: `
+                    <h2>المهارات التقنية</h2>
+                    
+                    <h3>اللغات البرمجية</h3>
+                    <ul>
+                        <li>HTML5 - مستوى أمني: 5</li>
+                        <li>CSS3/SASS - مستوى أمني: 5</li>
+                        <li>JavaScript (ES6+) - مستوى أمني: 5</li>
+                        <li>TypeScript - مستوى أمني: 4</li>
+                        <li class="redacted" data-reveal="Python - مستوى أمني: 4">لغة برمجة متقدمة</li>
+                    </ul>
+                    
+                    <h3>المكتبات والأطر</h3>
+                    <ul>
+                        <li>React.js - مستوى أمني: 5</li>
+                        <li>Vue.js - مستوى أمني: 4</li>
+                        <li>Angular - مستوى أمني: 3</li>
+                        <li>Bootstrap - مستوى أمني: 5</li>
+                        <li>Tailwind CSS - مستوى أمني: 4</li>
+                    </ul>
+                    
+                    <h3>أدوات التطوير</h3>
+                    <ul>
+                        <li>Git/GitHub - مستوى أمني: 5</li>
+                        <li>Webpack - مستوى أمني: 4</li>
+                        <li>npm/yarn - مستوى أمني: 5</li>
+                        <li>VS Code - مستوى أمني: 5</li>
+                        <li>Figma - مستوى أمني: 4</li>
+                    </ul>
+                    
+                    <div class="classified-text">
+                        <h3>المهارات الأمنية</h3>
+                        <ul>
+                            <li>تشفير البيانات - مستوى أمني: 4</li>
+                            <li>أمن تطبيقات الويب - مستوى أمني: 4</li>
+                            <li>إدارة الهوية والوصول - مستوى أمني: 3</li>
+                        </ul>
+                    </div>
+                    
+                    <h3>المهارات الشخصية</h3>
+                    <ul>
+                        <li>حل المشكلات - مستوى أمني: 5</li>
+                        <li>العمل الجماعي - مستوى أمني: 5</li>
+                        <li>التواصل الفعال - مستوى أمني: 4</li>
+                        <li>إدارة الوقت - مستوى أمني: 4</li>
+                    </ul>
+                `
+            },
+            contact: {
+                title: "CONTACT_ME",
+                content: `
+                    <h2>معلومات الاتصال</h2>
+                    
+                    <p><strong>البريد الإلكتروني:</strong> your.email@domain.com</p>
+                    <p><strong>رقم الهاتف:</strong> +20 123 456 7890</p>
+                    <p><strong>العنوان:</strong> [مدينتك، بلدك]</p>
+                    
+                    <div class="classified-text">
+                        <p><strong>للاتصال في حالات الطوارئ:</strong> اترك رسالة في صندوق البريد السريع برقم 734</p>
+                    </div>
+                    
+                    <h2>وسائل التواصل الاجتماعي</h2>
+                    <ul>
+                        <li>LinkedIn: <a href="#" style="color: #00ff00;">linkedin.com/in/yourprofile</a></li>
+                        <li>GitHub: <a href="#" style="color: #00ff00;">github.com/yourusername</a></li>
+                        <li>Twitter: <a href="#" style="color: #00ff00;">twitter.com/yourhandle</a></li>
+                    </ul>
+                    
+                    <h2>أرسل لي رسالة</h2>
+                    <form id="contactForm">
+                        <input type="text" placeholder="الاسم" style="width: 100%; padding: 10px; margin-bottom: 10px; background: rgba(0,0,0,0.7); border: 1px solid #00ff00; color: #00ff00;">
+                        <input type="email" placeholder="البريد الإلكتروني" style="width: 100%; padding: 10px; margin-bottom: 10px; background: rgba(0,0,0,0.7); border: 1px solid #00ff00; color: #00ff00;">
+                        <textarea placeholder="الرسالة" rows="5" style="width: 100%; padding: 10px; margin-bottom: 10px; background: rgba(0,0,0,0.7); border: 1px solid #00ff00; color: #00ff00;"></textarea>
+                        <button type="submit" style="width: 100%; padding: 10px; background: #004d00; color: #00ff00; border: 1px solid #00ff00; cursor: pointer;">إرسال الرسالة</button>
+                    </form>
+                `
+            },
+            secret: {
+                title: "SECRET_FILES",
+                content: `
+                    <h2>الملفات السرية</h2>
+                    <p>هذه الملفات تحتوي على معلومات حساسة تتطلب تصريحًا أمنيًا من المستوى 3 للوصول إليها.</p>
+                    
+                    <div class="classified-text">
+                        <h3>مشروع أطلس</h3>
+                        <p>نظام مراقبة وتحليل للبيانات الضخمة بزمن حقيقي.</p>
+                        <p><strong>الحالة:</strong> <span style="color: #b30000;">سري للغاية</span></p>
+                        <p><strong>مستوى التصنيف:</strong> مستوى 3</p>
+                    </div>
+                    
+                    <div class="classified-text">
+                        <h3>عملية الشفق</h3>
+                        <p>منصة استخباراتية للتحليل التنبؤي والكشف عن التهديدات.</p>
+                        <p><strong>الحالة:</strong> <span style="color: #b30000;">سري للغاية</span></p>
+                        <p><strong>مستوى التصنيف:</strong> مستوى 4</p>
+                    </div>
+                    
+                    <div class="classified-text">
+                        <h3>برنامج الحارس</h3>
+                        <p>نظام حماية متقدم للبنى التحتية الحرجة.</p>
+                        <p><strong>الحالة:</strong> <span style="color: #b30000;">سري للغاية</span></p>
+                        <p><strong>مستوى التصنيف:</strong> مستوى 3</p>
+                    </div>
+                    
+                    <p style="text-align: center; margin-top: 20px; font-style: italic;">
+                        للوصول إلى هذه الملفات، يلزم الحصول على تصريح أمني من المسؤول.
+                    </p>
+                `
+            }
+        };
+
+        // تهيئة التأثيرات
+        createParticles();
+        simulateEncryption();
+        simulateSystemUpdates();
+
+        // فتح البورتفوليو
+        unlockBtn.addEventListener('click', function() {
+            if (passwordInput.value.toLowerCase() === 'portfolio') {
+                // محاكاة التحميل
+                simulateLoading();
+                
+                // تأثير صوتي
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                oscillator.connect(audioContext.destination);
+                oscillator.start();
+                oscillator.stop(audioContext.currentTime + 0.5);
+                
+                // الانتقال إلى الواجهة الرئيسية
+                setTimeout(() => {
+                    loginScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        loginScreen.style.display = 'none';
+                        desktop.style.display = 'flex';
+                    }, 500);
+                }, 1000);
+            } else {
+                passwordInput.style.borderColor = '#ff0000';
+                passwordInput.value = '';
+                passwordInput.placeholder = 'ACCESS DENIED! Try again';
+                
+                // تأثير الخطأ
+                loginScreen.style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    loginScreen.style.animation = '';
+                }, 500);
+            }
+        });
+
+        // إضافة تأثير الاهتزاز عند الخطأ
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                20%, 40%, 60%, 80% { transform: translateX(5px); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // السماح بالدخول عند الضغط على Enter
+        passwordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                unlockBtn.click();
+            }
+        });
+
+        // فتح المجلدات
+        document.querySelectorAll('.folder').forEach(folder => {
+            folder.addEventListener('click', function() {
+                const target = this.dataset.target;
+                openFolder(target);
+            });
+        });
+
+        // دالة فتح المجلد
+        function openFolder(folderName) {
+            if (contentData[folderName]) {
+                // محاكاة التحميل
+                simulateLoading();
+                
+                setTimeout(() => {
+                    contentTitle.textContent = contentData[folderName].title;
+                    contentBody.innerHTML = contentData[folderName].content;
+                    contentWindow.style.display = 'block';
+                    
+                    // إضافة تأثيرات للمحتوى
+                    const paragraphs = contentBody.querySelectorAll('p, li, h2, h3, .classified-text');
+                    paragraphs.forEach((p, index) => {
+                        p.style.opacity = '0';
+                        p.style.transform = 'translateY(10px)';
+                        setTimeout(() => {
+                            p.style.transition = 'opacity 0.5s, transform 0.5s';
+                            p.style.opacity = '1';
+                            p.style.transform = 'translateY(0)';
+                        }, index * 100);
+                    });
+                    
+                    // إضافة إمكانية الكشف عن النصوص المحجوبة
+                    const redactedElements = contentBody.querySelectorAll('.redacted');
+                    redactedElements.forEach(el => {
+                        el.addEventListener('click', function() {
+                            if (!this.classList.contains('revealed')) {
+                                this.classList.add('revealed');
+                                this.textContent = this.getAttribute('data-reveal');
+                                
+                                // تأثير صوتي للكشف
+                                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                                const oscillator = audioContext.createOscillator();
+                                oscillator.type = 'sine';
+                                oscillator.frequency.setValueAtTime(600, audioContext.currentTime);
+                                oscillator.connect(audioContext.destination);
+                                oscillator.start();
+                                oscillator.stop(audioContext.currentTime + 0.3);
+                            }
+                        });
+                    });
+                }, 500);
+            }
+        }
+
+        // إغلاق نافذة المحتوى
+        closeBtn.addEventListener('click', function() {
+            contentWindow.style.display = 'none';
+        });
+
+        // إغلاق النافذة عند النقر خارجها
+        window.addEventListener('click', function(e) {
+            if (e.target === contentWindow) {
+                contentWindow.style.display = 'none';
+            }
+        });
+
+        // تأثيرات إضافية عند التمرير
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * -0.5;
+            document.querySelector('.classified-stamp').style.transform = `translate(-50%, -50%) rotate(-15deg) translateY(${rate}px)`;
+        });
+    </script>
+</body>
+</html>
